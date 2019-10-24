@@ -23,3 +23,18 @@
     state: present
   with_items:
     - "{{ docker_packages }}"
+  notify:
+    - gather service facts
+    - reload iptables
+    - spamhaus-droplist
+    - docker
+    - docker-iptables
+
+- name: add user to docker group
+  user:
+    name: "{{ item }}"
+    groups: docker
+    append: yes
+  with_items:
+    - "{{ docker_user }}"
+  when: docker_user is defined
