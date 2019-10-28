@@ -1,40 +1,8 @@
 ---
 
-- name: install requirements
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - "{{ docker_requirements }}"
-
-- name: add dockers official gpg key
-  apt_key:
-    url: "{{ docker_gpg_key_url }}"
-    id: "{{ docker_gpg_key_fingerprint }}"
-
-- name: add docker package sources
-  apt_repository:
-    repo: "{{ docker_repository }}"
-    filename: docker-ce
-
 - name: install docker
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - "{{ docker_packages }}"
-  notify:
-    - gather service facts
-    - reload iptables
-    - spamhaus-droplist
-    - docker
-    - docker-iptables
+  import_tasks: docker.yml
 
-- name: add user to docker group
-  user:
-    name: "{{ item }}"
-    groups: docker
-    append: yes
-  with_items:
-    - "{{ docker_user }}"
-  when: docker_user is defined
+- name: install docker-compose
+  import_tasks: compose.yml
+  when: docker_compose

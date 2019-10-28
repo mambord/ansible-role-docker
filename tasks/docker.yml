@@ -1,0 +1,58 @@
+---
+
+- name: install requirements
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ docker_requirements }}"
+
+- name: add dockers official gpg key
+  apt_key:
+    url: "{{ docker_gpg_key_url }}"
+    id: "{{ docker_gpg_key_fingerprint }}"
+
+- name: add docker package sources
+  apt_repository:
+    repo: "{{ docker_repository }}"
+    filename: docker-ce
+
+- name: install docker
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ docker_packages }}"
+  notify:
+    - gather service facts
+    - reload iptables
+    - spamhaus-droplist
+    - docker
+    - docker-iptables
+
+- name: install docker SDK for python
+  package:
+    name: python-docker
+    state: present
+  when: docker_sdk_python
+
+- name: add user to docker group
+  user:
+    name: "{{ item }}"
+    groups: docker
+    append: yes
+  with_items:
+    - "{{ docker_user }}"
+  when: docker_user is defined
+
+- name: configure insecure registries
+  template:
+    src: templates/etc/docker/daemon.json.j2
+    dest: /etc/docker/daemon.json
+  when: docker_insecure_registries is defined
+  notify:
+    - gather service facts
+    - reload iptables
+    - spamhaus-droplist
+    - docker
+    - docker-iptables
