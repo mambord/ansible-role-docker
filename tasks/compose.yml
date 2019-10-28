@@ -1,0 +1,12 @@
+---
+
+- name: install pip
+  package:
+    name: python-pip
+    state: present
+
+- name: install docker-compose
+  pip:
+    name:
+      - docker-compose
+    state: latest
