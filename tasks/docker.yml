@@ -32,7 +32,7 @@
 
 - name: install docker SDK for python
   package:
-    name: python-docker
+    name: python3-docker
     state: present
   when: docker_sdk_python
 
