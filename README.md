@@ -24,16 +24,10 @@ docker_repository: deb [arch=amd64] https://download.docker.com/linux/debian bus
 
 ```
 ### Docker compose
-docker-compose is installed with pip, because the ansible module [docker_compose](https://docs.ansible.com/ansible/latest/modules/docker_compose_module.html ) does currently not work with docker-compose installed from apt.
+docker-compose is installed by default and comes bundled with Docker SDK for Python. In case you want to control container with ansible's module (docker_compose)[https://docs.ansible.com/ansible/latest/modules/docker_compose_module.html], ensure to use ansible with (python3)[https://docs.ansible.com/ansible/latest/reference_appendices/python_3_support.html#using-python-3-on-the-managed-machines-with-commands-and-playbooks]
 
 ```yaml
-docker_compose: no
-```
-
-### Docker SDK for Python
-Docker SDK for Python is used by ansibles [docker_compose](https://docs.ansible.com/ansible/latest/modules/docker_compose_module.html ) module.
-```yaml
-docker_sdk_python: no
+docker_compose: yes
 ```
 
 ### Docker user

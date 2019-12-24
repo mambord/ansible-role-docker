@@ -30,12 +30,6 @@
     - docker
     - docker-iptables
 
-- name: install docker SDK for python
-  package:
-    name: python3-docker
-    state: present
-  when: docker_sdk_python
-
 - name: add user to docker group
   user:
     name: "{{ item }}"

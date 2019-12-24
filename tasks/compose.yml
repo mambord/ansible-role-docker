@@ -1,12 +1,11 @@
 ---
 
-- name: install pip
+# Ensure to use ansible with python3 when controlling container with docker_compose module
+# see https://docs.ansible.com/ansible/latest/reference_appendices/python_3_support.html#using-python-3-on-the-managed-machines-with-commands-and-playbooks
+- name: install docker-compose & docker sdk for python
   package:
-    name: python3-pip
+    name: "{{ item }}"
     state: present
-
-- name: install docker-compose
-  pip:
-    name:
-      - docker-compose
-    state: latest
+  with_items:
+    - python3-docker
+    - docker-compose
